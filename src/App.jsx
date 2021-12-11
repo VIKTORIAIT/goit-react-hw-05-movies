@@ -1,12 +1,6 @@
 import { Component } from "react";
 import { Loader } from "./component/Loader/Loader";
 import Searchbar from "./component/Searchbar/Searchbar";
-// import { nanoid } from "nanoid";
-// import ContactList from "./component/ContactList";
-// import ContactForm from "./component/ContactForm";
-// import Filter from "./component/Filter";
-// import s from "./App.module.css";
-// import * as storage from "./services/localStorage";
 
 const API_KEY = "24365762-4d41dfacdb025e40bdae241c8";
 class App extends Component {
@@ -81,14 +75,6 @@ class App extends Component {
       <div>
         <Searchbar onSubmit={this.onSubmit} />
         {this.state.isLoad && <Loader />}
-        {/* <h1>Phonebook</h1>
-        <ContactForm onChange={this.onChange} onSubmit={this.handleSubmit} />
-        <h2>Contacts</h2>
-        <Filter onChange={this.handleFilterChange} />
-        <ContactList
-          data={this.getFilteredContacts()}
-          onDelete={this.onDelete}
-        /> */}
       </div>
     );
   }
