@@ -1,93 +1,94 @@
 import { Component } from "react";
-import { nanoid } from "nanoid";
-import ContactList from "./component/ContactList";
-import ContactForm from "./component/ContactForm";
-import Filter from "./component/Filter";
-import s from "./App.module.css";
-import * as storage from "./services/localStorage";
+import { Loader } from "./component/Loader/Loader";
+import Searchbar from "./component/Searchbar/Searchbar";
+// import { nanoid } from "nanoid";
+// import ContactList from "./component/ContactList";
+// import ContactForm from "./component/ContactForm";
+// import Filter from "./component/Filter";
+// import s from "./App.module.css";
+// import * as storage from "./services/localStorage";
 
-const STORAGE_KEY = "contacts";
-
+const API_KEY = "24365762-4d41dfacdb025e40bdae241c8";
 class App extends Component {
   state = {
-    contacts: [
-      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-    ],
-    name: "",
-    number: "",
-    filter: "",
+    hits: [],
+    totalHits: null,
+    page: 1,
+    q: "",
+    isLoad: false,
   };
 
+  fetchRequest() {
+    console.log(this.state.q, "fff");
+    const fetchParams = {
+      per_page: 12,
+      orientation: "horizontal",
+      image_type: "photo",
+      key: API_KEY,
+      page: this.state.page,
+    };
+    if (this.state.q) fetchParams.q = this.state.q;
+
+    const paramsString = new URLSearchParams(fetchParams);
+    console.log(paramsString.toString(), "paramsString");
+
+    this.setState({ isLoad: true });
+    fetch(`https://pixabay.com/api/?${paramsString}`)
+      .then((data) => data.json())
+      .then((data) => {
+        console.log(data);
+        this.setState((perState) => ({
+          hits:
+            this.state.page === 1
+              ? data.hits
+              : [...perState.hits, ...data.hits],
+          totalHits: data.totalHits,
+        }));
+        this.setState({ isLoad: false });
+      })
+      .catch((error) => {
+        this.setState({ isLoad: false });
+      });
+  }
+
   componentDidMount() {
-    const savedContacts = storage.get(STORAGE_KEY);
-    if (savedContacts) {
-      this.setState({ contacts: savedContacts });
-    }
+    this.fetchRequest();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { contacts } = this.state;
-    if (prevState.contacts !== contacts) {
-      storage.save(STORAGE_KEY, contacts);
+    if (this.state.q !== prevState.q || this.state.page !== prevState.page) {
+      this.fetchRequest();
     }
   }
 
-  onChange = (ev) => {
-    this.setState({ [ev.target.name]: ev.target.value });
-  };
-
-  handleFilterChange = (ev) => this.setState({ filter: ev.target.value });
-  getFilteredContacts = () => {
-    const { contacts, filter } = this.state;
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
-  onDelete = (ev) => {
-    this.setState((prevState) => ({
-      contacts: prevState.contacts.filter(
-        (item) => item.number !== ev.target.id
-      ),
-    }));
-  };
-
-  handleSubmit = (ev) => {
+  onSubmit = (ev) => {
     ev.preventDefault();
-    const isDoubleName = this.state.contacts.some(
-      (el) => el.name === this.state.name
-    );
-    if (isDoubleName) {
-      alert(`${this.state.name} is already in contacts`);
-    }
-    if (!isDoubleName) {
-      this.setState((prevState) => ({
-        contacts: [
-          ...prevState.contacts,
-          {
-            name: prevState.name,
-            id: nanoid(),
-            number: prevState.number,
-          },
-        ],
-      }));
-    }
+    console.log(ev.target.search.value);
+
+    this.setState({
+      page: 1,
+      q: ev.target.search.value,
+    });
+  };
+  onMoreButtonClick = () => {
+    this.setState((prevState) => ({
+      page: ++prevState.page,
+    }));
   };
 
   render() {
     return (
-      <div className={s.container}>
-        <h1>Phonebook</h1>
+      <div>
+        <Searchbar onSubmit={this.onSubmit} />
+        {this.state.isLoad && <Loader />}
+        {/* <h1>Phonebook</h1>
         <ContactForm onChange={this.onChange} onSubmit={this.handleSubmit} />
         <h2>Contacts</h2>
         <Filter onChange={this.handleFilterChange} />
         <ContactList
           data={this.getFilteredContacts()}
           onDelete={this.onDelete}
-        />
+        /> */}
       </div>
     );
   }
