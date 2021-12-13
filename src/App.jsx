@@ -74,7 +74,7 @@ class App extends Component {
   };
   onMoreButtonClick = () => {
     this.setState((prevState) => ({
-      page: ++prevState.page,
+      page: prevState.page + 1,
     }));
   };
 
@@ -92,11 +92,12 @@ class App extends Component {
   handleEscape = (ev) => {
     console.log(ev.code);
     if (ev.code === "Escape") {
-      this.onModalClose();
+      this.setState({ isModalOpen: false });
     }
   };
 
-  onModalClose = () => {
+  onModalClose = (ev) => {
+    if (ev.target.tagName === "IMG") return;
     this.setState({ isModalOpen: false });
   };
 
