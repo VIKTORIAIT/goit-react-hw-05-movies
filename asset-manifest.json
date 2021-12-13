@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/goit-react-hw-04-hooks-images/static/css/main.219458c5.chunk.css",
-    "main.js": "/goit-react-hw-04-hooks-images/static/js/main.b3c05dc5.chunk.js",
-    "main.js.map": "/goit-react-hw-04-hooks-images/static/js/main.b3c05dc5.chunk.js.map",
+    "main.js": "/goit-react-hw-04-hooks-images/static/js/main.707f2d0c.chunk.js",
+    "main.js.map": "/goit-react-hw-04-hooks-images/static/js/main.707f2d0c.chunk.js.map",
     "runtime-main.js": "/goit-react-hw-04-hooks-images/static/js/runtime-main.1a00052a.js",
     "runtime-main.js.map": "/goit-react-hw-04-hooks-images/static/js/runtime-main.1a00052a.js.map",
     "static/css/2.bc922b9c.chunk.css": "/goit-react-hw-04-hooks-images/static/css/2.bc922b9c.chunk.css",
@@ -19,6 +19,6 @@
     "static/css/2.bc922b9c.chunk.css",
     "static/js/2.18dccf6e.chunk.js",
     "static/css/main.219458c5.chunk.css",
-    "static/js/main.b3c05dc5.chunk.js"
+    "static/js/main.707f2d0c.chunk.js"
   ]
 }
