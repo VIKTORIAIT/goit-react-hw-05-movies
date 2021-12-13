@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Component } from "react";
 import Loader from "./components/Loader/Loader";
 import Searchbar from "./components/Searchbar/Searchbar";
@@ -9,17 +8,18 @@ import { Modal } from "./components/Modal/Modal";
 import s from "./App.module.css";
 
 const API_KEY = "24365762-4d41dfacdb025e40bdae241c8";
+class App extends Component {
+  state = {
+    hits: [],
+    totalHits: null,
+    page: 1,
+    q: "",
+    isLoad: false,
+    id: null,
+    isModalOpen: false,
+  };
 
-export default function App() {
-  const [hits, setHits] = useState([]);
-  const [totalHits, setTotalHits] = useState(null);
-  const [page, setPage] = useState(1);
-  const [q, setQ] = useState("");
-  const [isLoad, setIsLoad] = useState(false);
-  const [id, setId] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const fetchRequest = () => {
+  fetchRequest() {
     const fetchParams = {
       per_page: 12,
       orientation: "horizontal",
@@ -47,23 +47,23 @@ export default function App() {
       .catch((error) => {
         this.setState({ isLoad: false });
       });
-  };
+  }
 
-  const componentDidMount = () => {
+  componentDidMount() {
     this.fetchRequest();
-  };
+  }
 
-  const componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate(prevProps, prevState) {
     if (this.state.q !== prevState.q || this.state.page !== prevState.page) {
       this.fetchRequest();
     }
-  };
+  }
 
-  const componentWillUnmount = () => {
+  componentWillUnmount() {
     console.log("unmount");
-  };
+  }
 
-  const onSubmit = (ev) => {
+  onSubmit = (ev) => {
     ev.preventDefault();
     console.log(ev.target.search.value);
 
@@ -72,54 +72,58 @@ export default function App() {
       q: ev.target.search.value,
     });
   };
-  const onMoreButtonClick = () => {
+  onMoreButtonClick = () => {
     this.setState((prevState) => ({
       page: prevState.page + 1,
     }));
   };
 
-  const onImageClick = (ev) => {
+  onImageClick = (ev) => {
     if (ev.target.tagName === "IMG") {
       this.setState({ id: ev.target.id });
     }
     this.onModalOpen();
   };
 
-  const onModalOpen = () => {
+  onModalOpen = () => {
     this.setState({ isModalOpen: true });
   };
 
-  const handleEscape = (ev) => {
+  handleEscape = (ev) => {
     console.log(ev.code);
     if (ev.code === "Escape") {
       this.setState({ isModalOpen: false });
     }
   };
 
-  const onModalClose = (ev) => {
+  onModalClose = (ev) => {
     if (ev.target.tagName === "IMG") return;
     this.setState({ isModalOpen: false });
   };
 
-  const { hits, isLoad, isModalOpen, id, totalHits, page } = this.state;
-  const maxPage = Math.ceil(totalHits / 12) === page;
-  return (
-    <div className={s.App}>
-      <Searchbar onSubmit={this.onSubmit} />
-      {this.state.isLoad && <Loader />}
-      <ImageGallery imgs={hits} onClick={onImageClick} />
-      {!isLoad && !maxPage && totalHits !== 0 && (
-        <Button onClick={onMoreButtonClick} />
-      )}
-      {this.state.isLoad && page !== 1 && <Loader />}
-      {isModalOpen && (
-        <Modal
-          handleEscape={handleEscape}
-          imgs={hits}
-          id={id}
-          onClick={onModalClose}
-        />
-      )}
-    </div>
-  );
+  render() {
+    const { hits, isLoad, isModalOpen, id, totalHits, page } = this.state;
+    const maxPage = Math.ceil(totalHits / 12) === page;
+    return (
+      <div className={s.App}>
+        <Searchbar onSubmit={this.onSubmit} />
+        {this.state.isLoad && <Loader />}
+        <ImageGallery imgs={hits} onClick={this.onImageClick} />
+        {!isLoad && !maxPage && totalHits !== 0 && (
+          <Button onClick={this.onMoreButtonClick} />
+        )}
+        {this.state.isLoad && page !== 1 && <Loader />}
+        {isModalOpen && (
+          <Modal
+            handleEscape={this.handleEscape}
+            imgs={hits}
+            id={id}
+            onClick={this.onModalClose}
+          />
+        )}
+      </div>
+    );
+  }
 }
+
+export default App;
