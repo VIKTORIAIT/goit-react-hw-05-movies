@@ -45,7 +45,6 @@ export default function App() {
   };
 
   useEffect(() => {
-    console.log(2);
     fetchRequest();
   }, [q, page]);
 
