@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { Component } from "react";
 import Loader from "./components/Loader/Loader";
 import Searchbar from "./components/Searchbar/Searchbar";
 import { ImageGallery } from "./components/ImageGallery/ImageGallery";
 import { Button } from "./components/Button/Button";
-import { Modal } from "./components/Modal/Modal";
+import Modal from "./components/Modal/Modal";
 
 import s from "./App.module.css";
 
@@ -25,85 +25,67 @@ export default function App() {
       orientation: "horizontal",
       image_type: "photo",
       key: API_KEY,
-      page: this.state.page,
+      page: page,
     };
-    if (q) fetchParams.q = this.state.q;
-    if (page === 1) this.setState({ hits: [] });
+    if (q) fetchParams.q = q;
+    if (page === 1) setHits([]);
     const paramsString = new URLSearchParams(fetchParams);
 
-    this.setState({ isLoad: true });
+    setIsLoad(true);
     fetch(`https://pixabay.com/api/?${paramsString}`)
       .then((data) => data.json())
       .then((data) => {
-        this.setState((perState) => ({
-          hits: page === 1 ? data.hits : [...perState.hits, ...data.hits],
-          totalHits: data.totalHits,
-        }));
-        this.setState({ isLoad: false });
+        setHits(page === 1 ? data.hits : [...hits, ...data.hits]);
+        setTotalHits(data.totalHits);
+        setIsLoad(false);
       })
       .catch((error) => {
-        this.setState({ isLoad: false });
+        setIsLoad(false);
       });
   };
 
-  const componentDidMount = () => {
-    this.fetchRequest();
-  };
-
-  const componentDidUpdate = (prevProps, prevState) => {
-    if (q !== prevState.q || page !== prevState.page) {
-      this.fetchRequest();
-    }
-  };
-
-  const componentWillUnmount = () => {
-    console.log("unmount");
-  };
+  useEffect(() => {
+    console.log(2);
+    fetchRequest();
+  }, [q, page]);
 
   const onSubmit = (ev) => {
     ev.preventDefault();
-    console.log(ev.target.search.value);
-
-    this.setState({
-      page: 1,
-      q: ev.target.search.value,
-    });
+    setPage(1);
+    setQ(ev.target.search.value);
   };
+
   const onMoreButtonClick = () => {
-    this.setState((prevState) => ({
-      page: prevState.page + 1,
-    }));
+    setPage(page + 1);
   };
 
   const onImageClick = (ev) => {
     if (ev.target.tagName === "IMG") {
-      this.setState({ id: ev.target.id });
+      setId(ev.target.id);
     }
-    this.onModalOpen();
+    onModalOpen();
   };
 
   const onModalOpen = () => {
-    this.setState({ isModalOpen: true });
+    setIsModalOpen(true);
   };
 
   const handleEscape = (ev) => {
-    console.log(ev.code);
     if (ev.code === "Escape") {
-      this.setState({ isModalOpen: false });
+      setIsModalOpen(false);
     }
   };
 
   const onModalClose = (ev) => {
     if (ev.target.tagName === "IMG") return;
-    this.setState({ isModalOpen: false });
+    setIsModalOpen(false);
   };
 
-  // const { hits, isLoad, isModalOpen, id, totalHits, page } = this.state;
   const maxPage = Math.ceil(totalHits / 12) === page;
   return (
     <div className={s.App}>
       <Searchbar onSubmit={onSubmit} />
-      {this.state.isLoad && <Loader />}
+      {isLoad && <Loader />}
       <ImageGallery imgs={hits} onClick={onImageClick} />
       {!isLoad && !maxPage && totalHits !== 0 && (
         <Button onClick={onMoreButtonClick} />
