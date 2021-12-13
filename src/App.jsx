@@ -1,19 +1,19 @@
-import { Component } from 'react';
-import Loader from './components/Loader/Loader';
-import Searchbar from './components/Searchbar/Searchbar';
-import { ImageGallery } from './components/ImageGallery/ImageGallery';
-import { Button } from './components/Button/Button';
-import { Modal } from './components/Modal/Modal';
+import { Component } from "react";
+import Loader from "./components/Loader/Loader";
+import Searchbar from "./components/Searchbar/Searchbar";
+import { ImageGallery } from "./components/ImageGallery/ImageGallery";
+import { Button } from "./components/Button/Button";
+import { Modal } from "./components/Modal/Modal";
 
-import s from './App.module.css';
+import s from "./App.module.css";
 
-const API_KEY = '24365762-4d41dfacdb025e40bdae241c8';
+const API_KEY = "24365762-4d41dfacdb025e40bdae241c8";
 class App extends Component {
   state = {
     hits: [],
     totalHits: null,
     page: 1,
-    q: '',
+    q: "",
     isLoad: false,
     id: null,
     isModalOpen: false,
@@ -22,8 +22,8 @@ class App extends Component {
   fetchRequest() {
     const fetchParams = {
       per_page: 12,
-      orientation: 'horizontal',
-      image_type: 'photo',
+      orientation: "horizontal",
+      image_type: "photo",
       key: API_KEY,
       page: this.state.page,
     };
@@ -33,9 +33,9 @@ class App extends Component {
 
     this.setState({ isLoad: true });
     fetch(`https://pixabay.com/api/?${paramsString}`)
-      .then(data => data.json())
-      .then(data => {
-        this.setState(perState => ({
+      .then((data) => data.json())
+      .then((data) => {
+        this.setState((perState) => ({
           hits:
             this.state.page === 1
               ? data.hits
@@ -44,7 +44,7 @@ class App extends Component {
         }));
         this.setState({ isLoad: false });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ isLoad: false });
       });
   }
@@ -57,16 +57,13 @@ class App extends Component {
     if (this.state.q !== prevState.q || this.state.page !== prevState.page) {
       this.fetchRequest();
     }
-    if (this.state.isModalOpen === prevState.isModalOpen) {
-      window.removeEventListener('keydown', this.handleEscape);
-    }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleEscape);
+    console.log("unmount");
   }
 
-  onSubmit = ev => {
+  onSubmit = (ev) => {
     ev.preventDefault();
     console.log(ev.target.search.value);
 
@@ -76,13 +73,13 @@ class App extends Component {
     });
   };
   onMoreButtonClick = () => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       page: ++prevState.page,
     }));
   };
 
-  onImageClick = ev => {
-    if (ev.target.tagName === 'IMG') {
+  onImageClick = (ev) => {
+    if (ev.target.tagName === "IMG") {
       this.setState({ id: ev.target.id });
     }
     this.onModalOpen();
@@ -90,11 +87,11 @@ class App extends Component {
 
   onModalOpen = () => {
     this.setState({ isModalOpen: true });
-    window.addEventListener('keydown', this.handleEscape);
   };
 
-  handleEscape = ev => {
-    if (ev.code === 'Escape') {
+  handleEscape = (ev) => {
+    console.log(ev.code);
+    if (ev.code === "Escape") {
       this.onModalClose();
     }
   };
@@ -116,7 +113,12 @@ class App extends Component {
         )}
         {this.state.isLoad && page !== 1 && <Loader />}
         {isModalOpen && (
-          <Modal imgs={hits} id={id} onClick={this.onModalClose} />
+          <Modal
+            handleEscape={this.handleEscape}
+            imgs={hits}
+            id={id}
+            onClick={this.onModalClose}
+          />
         )}
       </div>
     );
