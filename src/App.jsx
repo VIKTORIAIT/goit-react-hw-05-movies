@@ -1,38 +1,41 @@
-import { Component } from "react";
-import { Loader } from "./component/Loader/Loader";
-import Searchbar from "./component/Searchbar/Searchbar";
-// import {Button}
+import { Component } from 'react';
+import Loader from './components/Loader/Loader';
+import Searchbar from './components/Searchbar/Searchbar';
+import { ImageGallery } from './components/ImageGallery/ImageGallery';
+import { Button } from './components/Button/Button';
+import { Modal } from './components/Modal/Modal';
 
-const API_KEY = "24365762-4d41dfacdb025e40bdae241c8";
+import s from './App.module.css';
+
+const API_KEY = '24365762-4d41dfacdb025e40bdae241c8';
 class App extends Component {
   state = {
     hits: [],
     totalHits: null,
     page: 1,
-    q: "",
+    q: '',
     isLoad: false,
+    id: null,
+    isModalOpen: false,
   };
 
   fetchRequest() {
-    console.log(this.state.q, "fff");
     const fetchParams = {
       per_page: 12,
-      orientation: "horizontal",
-      image_type: "photo",
+      orientation: 'horizontal',
+      image_type: 'photo',
       key: API_KEY,
       page: this.state.page,
     };
     if (this.state.q) fetchParams.q = this.state.q;
-
+    if (this.state.page === 1) this.setState({ hits: [] });
     const paramsString = new URLSearchParams(fetchParams);
-    console.log(paramsString.toString(), "paramsString");
 
     this.setState({ isLoad: true });
     fetch(`https://pixabay.com/api/?${paramsString}`)
-      .then((data) => data.json())
-      .then((data) => {
-        console.log(data);
-        this.setState((perState) => ({
+      .then(data => data.json())
+      .then(data => {
+        this.setState(perState => ({
           hits:
             this.state.page === 1
               ? data.hits
@@ -41,7 +44,7 @@ class App extends Component {
         }));
         this.setState({ isLoad: false });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({ isLoad: false });
       });
   }
@@ -54,9 +57,16 @@ class App extends Component {
     if (this.state.q !== prevState.q || this.state.page !== prevState.page) {
       this.fetchRequest();
     }
+    if (this.state.isModalOpen === prevState.isModalOpen) {
+      window.removeEventListener('keydown', this.handleEscape);
+    }
   }
 
-  onSubmit = (ev) => {
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleEscape);
+  }
+
+  onSubmit = ev => {
     ev.preventDefault();
     console.log(ev.target.search.value);
 
@@ -66,16 +76,48 @@ class App extends Component {
     });
   };
   onMoreButtonClick = () => {
-    this.setState((prevState) => ({
+    this.setState(prevState => ({
       page: ++prevState.page,
     }));
   };
 
+  onImageClick = ev => {
+    if (ev.target.tagName === 'IMG') {
+      this.setState({ id: ev.target.id });
+    }
+    this.onModalOpen();
+  };
+
+  onModalOpen = () => {
+    this.setState({ isModalOpen: true });
+    window.addEventListener('keydown', this.handleEscape);
+  };
+
+  handleEscape = ev => {
+    if (ev.code === 'Escape') {
+      this.onModalClose();
+    }
+  };
+
+  onModalClose = () => {
+    this.setState({ isModalOpen: false });
+  };
+
   render() {
+    const { hits, isLoad, isModalOpen, id, totalHits, page } = this.state;
+    const maxPage = Math.ceil(totalHits / 12) === page;
     return (
-      <div>
+      <div className={s.App}>
         <Searchbar onSubmit={this.onSubmit} />
         {this.state.isLoad && <Loader />}
+        <ImageGallery imgs={hits} onClick={this.onImageClick} />
+        {!isLoad && !maxPage && totalHits !== 0 && (
+          <Button onClick={this.onMoreButtonClick} />
+        )}
+        {this.state.isLoad && page !== 1 && <Loader />}
+        {isModalOpen && (
+          <Modal imgs={hits} id={id} onClick={this.onModalClose} />
+        )}
       </div>
     );
   }
