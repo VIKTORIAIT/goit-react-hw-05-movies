@@ -8,7 +8,7 @@ export default function MoviesPage() {
   const inputRef = useRef(null);
   const match = useRouteMatch();
 
-  console.log(444);
+  // console.log(444);
   const history = useHistory();
   const {
     location: { search },
@@ -30,7 +30,7 @@ export default function MoviesPage() {
       });
   }, [search]);
 
-  console.log(history);
+  // console.log(history);
   const onSearchClick = () => {
     history.push(match.url + `?query=` + inputRef.current.value);
 

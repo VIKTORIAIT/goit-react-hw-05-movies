@@ -1,4 +1,4 @@
-import fetch from "../services/ApiService";
+import { apiService } from "../services/ApiService";
 import { useEffect, useState } from "react";
 // import { NavLink } from "react-router-dom";
 import RenderList from "../components/RenderList/RenderList";
@@ -7,7 +7,9 @@ export default function HomePage() {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    fetch().then((data) => setMovies(data.results));
+    apiService()
+      .then((data) => setMovies(data.results))
+      .catch((e) => console.log(e));
   }, []);
 
   return (
