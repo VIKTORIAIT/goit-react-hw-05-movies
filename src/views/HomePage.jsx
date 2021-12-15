@@ -1,6 +1,5 @@
 import { apiService } from "../services/ApiService";
 import { useEffect, useState } from "react";
-// import { NavLink } from "react-router-dom";
 import RenderList from "../components/RenderList/RenderList";
 import s from "./HomePage.module.css";
 

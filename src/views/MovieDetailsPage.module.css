@@ -7,9 +7,49 @@
   border-style: solid;
   border-color: brown;
   margin-left: 15px;
+  margin-bottom: 15px;
 }
 .btn:hover,
 .btn:focus {
   background-color: brown;
   color: white;
+}
+.mainBlock {
+  display: flex;
+  border-bottom: darkslategray solid 1px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  margin-bottom: 30px;
+}
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-top: 40px;
+  padding-left: 25px;
+}
+.nav {
+  padding-left: 25px;
+  margin-bottom: 25px;
+}
+.titleNav {
+  margin-bottom: 15px;
+}
+.navNames {
+  display: flex;
+  gap: 25px;
+}
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: brown;
+  color: aliceblue;
+}
+.link:hover,
+.link:focus {
+  background-color: rgb(235, 229, 229);
+  color: brown;
 }

@@ -47,7 +47,7 @@ export default function MovieDetailsPage() {
               </button>
               <img
                 className={s.img}
-                width="200px"
+                width="250px"
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt="{movie.tagline}"
               />
@@ -68,24 +68,26 @@ export default function MovieDetailsPage() {
               </p>
             </div>
           </div>
-          <div>
-            <h3>Additional information</h3>
-            <NavLink
-              className={s.link}
-              activeClassName={s.activeLink}
-              to={`${url}/cast`}
-              replace
-            >
-              Cast
-            </NavLink>
-            <NavLink
-              className={s.link}
-              activeClassName={s.activeLink}
-              to={`${url}/reviews`}
-              replace
-            >
-              Reviews
-            </NavLink>
+          <div className={s.nav}>
+            <h3 className={s.titleNav}>Additional information</h3>
+            <div className={s.navNames}>
+              <NavLink
+                className={s.link}
+                activeClassName={s.activeLink}
+                to={`${url}/cast`}
+                replace
+              >
+                Cast
+              </NavLink>
+              <NavLink
+                className={s.link}
+                activeClassName={s.activeLink}
+                to={`${url}/reviews`}
+                replace
+              >
+                Reviews
+              </NavLink>
+            </div>
           </div>
         </>
       )}

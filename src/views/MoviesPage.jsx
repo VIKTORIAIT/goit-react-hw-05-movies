@@ -30,7 +30,6 @@ export default function MoviesPage() {
       });
   }, [search]);
 
-  // console.log(history);
   const onSearchClick = () => {
     history.push(match.url + `?query=` + inputRef.current.value);
 

@@ -1,11 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import s from "./App.module.css";
-// import HomeView from "./views/HomePage.jsx";
-// import NotFoundView from "./views/NotFoundView";
 import AppBar from "./components/AppBar/AppBar";
-// import MoviesPage from "./views/MoviesPage";
-// import MovieDetailsPage from "./views/MovieDetailsPage";
 
 const HomeView = lazy(() =>
   import("./views/HomePage.jsx" /* webpackChunkName: "HomeView" */)
