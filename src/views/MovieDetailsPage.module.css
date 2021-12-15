@@ -1,0 +1,9 @@
+.link {
+  color: blue;
+}
+.activeLink {
+  color: red;
+}
+.nav {
+  display: flex;
+}
