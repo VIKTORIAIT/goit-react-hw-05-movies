@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   Route,
   Switch,
@@ -89,17 +89,18 @@ export default function MovieDetailsPage() {
           </div>
         </>
       )}
-
-      <Switch>
-        <Route
-          path={`${url}/cast`}
-          component={(props) => <CastBlock {...props} movieId={movieId} />}
-        />
-        <Route
-          path={`${url}/reviews`}
-          component={(props) => <ReviewsBlock {...props} movieId={movieId} />}
-        />
-      </Switch>
+      <Suspense fallback={<h1>Loading...</h1>}>
+        <Switch>
+          <Route
+            path={`${url}/cast`}
+            component={(props) => <CastBlock {...props} movieId={movieId} />}
+          />
+          <Route
+            path={`${url}/reviews`}
+            component={(props) => <ReviewsBlock {...props} movieId={movieId} />}
+          />
+        </Switch>
+      </Suspense>
     </>
   );
 }

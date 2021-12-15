@@ -9,7 +9,7 @@ const RenderList = ({ movies }) => {
           {movies.map((movie) => (
             <li key={movie.id} className={s.item}>
               <NavLink to={`/movies/${movie.id}`}>
-                {movie.original_title}
+                {movie.title || movie.name}
               </NavLink>
             </li>
           ))}
