@@ -1,25 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useRouteMatch } from "react-router";
 import { getMoviesReview } from "../../services/ApiService";
 
-export default function ReviewsBlock() {
-  const { url } = useRouteMatch();
-  const { id: movieId } = useParams();
-  const [movie, setMovie] = useState(null);
-  console.log(movie);
-  let ID = url.replace(/\D/g, "");
+export default function ReviewsBlock({ movieId }) {
+  const [movie, setMovie] = useState([]);
 
   useEffect(() => {
-    getMoviesReview(ID)
+    getMoviesReview(movieId)
       .then((data) => {
-        console.log(data);
         setMovie(data);
-        console.log(movie.results);
       })
       .catch((e) => {
         console.error();
       });
     return () => {};
-  }, [ID]);
-  // return movie.results && <ul>movie.results.map(el => )</ul>;
+  }, [movieId]);
+  return (
+    <>
+      {!!movie.results && !!movie.results.length ? (
+        <ul>
+          {movie.results.map((el) => {
+            return (
+              <li key={el.id}>
+                <b>Author: {el.author}</b>
+                <p>{el.content}</p>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p>We don't have any reviwes for this movie</p>
+      )}
+    </>
+  );
 }

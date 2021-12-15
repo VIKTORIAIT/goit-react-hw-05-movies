@@ -1,0 +1,16 @@
+.item {
+  font-size: 14px;
+  color: black;
+  margin-bottom: 15px;
+}
+.item:hover,
+.item:focus {
+  color: brown;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+.list {
+  margin-left: 30px;
+}
+a {
+  color: currentColor;
+}

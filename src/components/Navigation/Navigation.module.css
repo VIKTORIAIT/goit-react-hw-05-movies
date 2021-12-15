@@ -1,9 +1,11 @@
 .link {
-  color: blue;
+  color: black;
 }
 .activeLink {
-  color: red;
+  color: rgb(128, 27, 27);
 }
 .nav {
   display: flex;
+  margin-left: 30px;
+  gap: 20px;
 }

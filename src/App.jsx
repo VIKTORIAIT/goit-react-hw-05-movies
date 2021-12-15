@@ -6,12 +6,10 @@ import NotFoundView from "./views/NotFoundView";
 import AppBar from "./components/AppBar/AppBar";
 import MoviesPage from "./views/MoviesPage";
 import MovieDetailsPage from "./views/MovieDetailsPage";
-// import
 
 export default function App() {
   return (
-    // <Container>
-    <>
+    <div className={s.container}>
       <AppBar />
       <Switch>
         <Route exact path="/">
@@ -27,7 +25,6 @@ export default function App() {
           <NotFoundView />
         </Route>
       </Switch>
-      {/* </Container> */}
-    </>
+    </div>
   );
 }

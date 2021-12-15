@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { useHistory, useRouteMatch } from "react-router";
 import RenderList from "../components/RenderList/RenderList";
 import { getMoviesBySearch } from "../services/ApiService";
+import s from "./MoviesPage.module.css";
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState([]);
   const inputRef = useRef(null);
   const match = useRouteMatch();
 
-  // console.log(444);
   const history = useHistory();
   const {
     location: { search },
@@ -39,8 +39,8 @@ export default function MoviesPage() {
 
   return (
     <>
-      <input type="text" ref={inputRef} />
-      <button type="button" onClick={onSearchClick}>
+      <input type="text" ref={inputRef} placeholder="Search your movie" />
+      <button className={s.btn} type="button" onClick={onSearchClick}>
         Search
       </button>
       <RenderList movies={movies} />
